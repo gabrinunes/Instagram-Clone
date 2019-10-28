@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "93424172392",
+    "firebase_url": "https://instagram-b7a0a.firebaseio.com",
+    "project_id": "instagram-b7a0a",
+    "storage_bucket": "instagram-b7a0a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93424172392:android:a0866dbb3dd6c562f72add",
+        "android_client_info": {
+          "package_name": "gabrielcunha.cursoandroid.instagram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "93424172392-bbop00flbqe2od5qqveco204r9cg02s0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "gabrielcunha.cursoandroid.instagram",
+            "certificate_hash": "9879bfbbc39891643dfdab9a236916ef85f380cf"
+          }
+        },
+        {
+          "client_id": "93424172392-a2p39k614bbkfu81qf8hmk93ehouildd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCb20VQZEzUVsjpAsZc_Uox8abczaJyQsk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "93424172392-a2p39k614bbkfu81qf8hmk93ehouildd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
