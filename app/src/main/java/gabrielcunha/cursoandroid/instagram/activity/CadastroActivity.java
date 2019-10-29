@@ -46,6 +46,8 @@ public class CadastroActivity extends AppCompatActivity {
         SenhaCadastro = findViewById(R.id.editCadastroSenha);
         buttonCadastro = findViewById(R.id.buttonCadastroEntrar);
         progressBar = findViewById(R.id.progressCadastro);
+
+        NomeCadastro.requestFocus();
     }
 
     public void cadastroUsuario(final Usuario usuario){
@@ -58,7 +60,6 @@ public class CadastroActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     progressBar.setVisibility(View.GONE);
                     exibirMensagem("Sucesso ao cadastrar");
-                    usuario.salvar();
                     startActivity(new Intent(getApplicationContext(),MainActivity.class));
                     finish();
                 }else{
