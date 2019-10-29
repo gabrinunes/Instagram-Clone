@@ -14,6 +14,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        incializarComponentes();
+    }
+
+    private void incializarComponentes() {
     }
 
     public void abrirCadastro(View view){

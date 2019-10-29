@@ -8,7 +8,7 @@
     tools:context=".activity.LoginActivity">
 
     <Button
-        android:id="@+id/buttonLoginEntrar"
+        android:id="@+id/buttonCadastroEntrar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -17,6 +17,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:background="@drawable/background_botao"
+        android:onClick="validarCadastroUsuario"
         android:text="Cadastrar"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="@+id/progressCadastro"
@@ -40,7 +41,7 @@
         android:padding="10dp"
         android:textColor="@android:color/white"
         android:textColorHint="@android:color/white"
-        app:layout_constraintBottom_toTopOf="@+id/buttonLoginEntrar"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCadastroEntrar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editCadastroEmail" />
@@ -108,6 +109,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLoginEntrar" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonCadastroEntrar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
