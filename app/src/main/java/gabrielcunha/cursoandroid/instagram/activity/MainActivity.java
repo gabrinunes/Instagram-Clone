@@ -1,8 +1,10 @@
-package gabrielcunha.cursoandroid.instagram;
+package gabrielcunha.cursoandroid.instagram.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import gabrielcunha.cursoandroid.instagram.R;
 
 public class MainActivity extends AppCompatActivity {
 
