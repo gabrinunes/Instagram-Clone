@@ -32,6 +32,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:11.8.0'
     implementation 'com.google.firebase:firebase-storage:11.8.0'
     implementation 'com.google.firebase:firebase-auth:11.8.0'
+
+
+    //Dependencia do NavigationBottom
+    implementation 'com.github.ittianyu:BottomNavigationViewEx:2.0.4'
 }
 
 apply plugin: 'com.google.gms.google-services'
