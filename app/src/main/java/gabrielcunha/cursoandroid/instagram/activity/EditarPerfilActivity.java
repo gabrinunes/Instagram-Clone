@@ -8,14 +8,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseUser;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 import gabrielcunha.cursoandroid.instagram.R;
+import gabrielcunha.cursoandroid.instagram.helper.UsuarioFirebase;
 import gabrielcunha.cursoandroid.instagram.model.Usuario;
 
 public class EditarPerfilActivity extends AppCompatActivity {
 
     private Button editButtonPerfil;
+    private CircleImageView editImagePerfil;
+    private TextView textAlterarFoto;
     private EditText editTextNome,editTextEmail;
     private Usuario usuario;
 
@@ -34,21 +41,15 @@ public class EditarPerfilActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_black_24dp);
 
-        editButtonPerfil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String textNome = editTextNome.getText().toString();
-                String textEmail = editTextEmail.getText().toString();
-                if(!textNome.isEmpty()){
-                    usuario = new Usuario();
-                    usuario.setNome(textNome);
-                    usuario.setEmail(textEmail);
-                    usuario.salvar();
-                }else{
-                    exibirMensagem("não pode campo em branco");
-                }
-            }
-        });
+        recuperaDadosPerfil();
+
+
+    }
+
+    private void recuperaDadosPerfil() {
+        FirebaseUser usuario = UsuarioFirebase.getUsuarioAtual();
+        editTextNome.setText(usuario.getDisplayName());
+        editTextEmail.setText(usuario.getEmail());
     }
 
     private void exibirMensagem(String texto) {
@@ -57,7 +58,10 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
     private void inicializarComponentes() {
         editButtonPerfil = findViewById(R.id.buttonEditPerfil);
-        editTextNome = findViewById(R.id.textEditNome);
-        editTextEmail = findViewById(R.id.textEditEmail);
+        editTextNome = findViewById(R.id.textEditNomePerfil);
+        editTextEmail = findViewById(R.id.textEditEmailPerfil);
+        editImagePerfil = findViewById(R.id.imageEditarPerfil);
+        textAlterarFoto = findViewById(R.id.textCadastrar);
+        editTextEmail.setFocusable(false);
     }
 }

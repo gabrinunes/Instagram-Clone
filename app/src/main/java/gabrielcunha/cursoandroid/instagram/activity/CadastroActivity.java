@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 import gabrielcunha.cursoandroid.instagram.helper.ConfiguracaoFirebase;
 import gabrielcunha.cursoandroid.instagram.R;
+import gabrielcunha.cursoandroid.instagram.helper.UsuarioFirebase;
 import gabrielcunha.cursoandroid.instagram.model.Usuario;
 
 public class CadastroActivity extends AppCompatActivity {
@@ -68,6 +69,10 @@ public class CadastroActivity extends AppCompatActivity {
                         exibirMensagem("Sucesso ao cadastrar");
                         startActivity(new Intent(getApplicationContext(),MainActivity.class));
                         usuario.salvar();
+
+                        //Salvar dados no profile do firebase
+                        UsuarioFirebase.atualizarNomeUsuario(usuario.getNome());
+
                         finish();
                     }catch (Exception e){
                         e.printStackTrace();

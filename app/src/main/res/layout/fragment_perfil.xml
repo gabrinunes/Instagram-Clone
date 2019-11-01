@@ -132,7 +132,7 @@
         app:layout_constraintGuide_percent="0.16843702" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imagePerfil"
+        android:id="@+id/imageEditarPerfil"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="16dp"
