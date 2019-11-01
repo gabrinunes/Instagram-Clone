@@ -24,13 +24,15 @@ public class EditarPerfilActivity extends AppCompatActivity {
     private CircleImageView editImagePerfil;
     private TextView textAlterarFoto;
     private EditText editTextNome,editTextEmail;
-    private Usuario usuario;
+    private Usuario usuarioLogado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil);
         inicializarComponentes();
+
+        usuarioLogado = UsuarioFirebase.getDadosUsuarioLogado();
 
         //Configura toolbar
 
@@ -43,6 +45,19 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
         recuperaDadosPerfil();
 
+        editButtonPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String nome = editTextNome.getText().toString();
+                UsuarioFirebase.atualizarNomeUsuario(nome);
+
+                //Atualizar nome no banco de dados
+                usuarioLogado.setNome(nome);
+                usuarioLogado.atualizar();
+                exibirMensagem("Dados alterados com sucesso!");
+            }
+        });
+
 
     }
 
@@ -53,7 +68,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
     }
 
     private void exibirMensagem(String texto) {
-        Toast.makeText(this,texto,Toast.LENGTH_SHORT);
+        Toast.makeText(EditarPerfilActivity.this,texto,Toast.LENGTH_SHORT);
     }
 
     private void inicializarComponentes() {
@@ -63,5 +78,11 @@ public class EditarPerfilActivity extends AppCompatActivity {
         editImagePerfil = findViewById(R.id.imageEditarPerfil);
         textAlterarFoto = findViewById(R.id.textCadastrar);
         editTextEmail.setFocusable(false);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return false;
     }
 }

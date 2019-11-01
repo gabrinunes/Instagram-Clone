@@ -10,14 +10,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import gabrielcunha.cursoandroid.instagram.model.Usuario;
+
 public class UsuarioFirebase {
 
-   public static FirebaseUser getUsuarioAtual(){
-       FirebaseAuth usuario = ConfiguracaoFirebase.getFirebaseAutenticacao();
-       return usuario.getCurrentUser();
-   }
+    public static FirebaseUser getUsuarioAtual() {
+        FirebaseAuth usuario = ConfiguracaoFirebase.getFirebaseAutenticacao();
+        return usuario.getCurrentUser();
+    }
 
-    public static void atualizarNomeUsuario(String nome){
+    public static void atualizarNomeUsuario(String nome) {
 
         try {
 
@@ -27,19 +29,37 @@ public class UsuarioFirebase {
             //Configurar objeto para alteração do perfil
             UserProfileChangeRequest profile = new UserProfileChangeRequest
                     .Builder()
-                    .setDisplayName( nome)
+                    .setDisplayName(nome)
                     .build();
             usuarioLogado.updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                  if(!task.isSuccessful()){
-                      Log.d("Perfil","Erro ao atualizar nome");
-                  }
+                    if (!task.isSuccessful()) {
+                        Log.d("Perfil", "Erro ao atualizar nome");
+                    }
                 }
             });
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static Usuario getDadosUsuarioLogado() {
+
+        FirebaseUser firebaseUser = getUsuarioAtual();
+
+        Usuario usuario = new Usuario();
+        usuario.setEmail(firebaseUser.getEmail());
+        usuario.setNome(firebaseUser.getDisplayName());
+        usuario.setId(firebaseUser.getUid());
+
+        if(firebaseUser.getPhotoUrl()==null){
+            usuario.setCaminhoFoto("");
+        }else{
+            usuario.setCaminhoFoto(firebaseUser.getPhotoUrl().toString());
+        }
+         return usuario;
+
     }
 }
