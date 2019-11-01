@@ -34,6 +34,7 @@ public class Usuario {
     public void salvar(){
         DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
         firebaseRef.child("usuarios")
+                   .child(getId())
                    .setValue(this);
     }
 
