@@ -1,5 +1,6 @@
 package gabrielcunha.cursoandroid.instagram.helper;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -45,6 +46,10 @@ public class UsuarioFirebase {
         }
     }
 
+    public static String getIdUsuario(){
+        return getUsuarioAtual().getUid();
+    }
+
     public static Usuario getDadosUsuarioLogado() {
 
         FirebaseUser firebaseUser = getUsuarioAtual();
@@ -60,6 +65,31 @@ public class UsuarioFirebase {
             usuario.setCaminhoFoto(firebaseUser.getPhotoUrl().toString());
         }
          return usuario;
+
+    }
+
+    public static boolean atualizarFotoUsuario(Uri url) {
+
+        try {
+
+            FirebaseUser user = getUsuarioAtual();
+            UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder()
+                    .setPhotoUri(url)
+                    .build();
+            user.updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (!task.isSuccessful()) {
+                        Log.d("Perfil", "Erro ao ataualizar foto de perfil" + task);
+                    }
+                }
+            });
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
 
     }
 }

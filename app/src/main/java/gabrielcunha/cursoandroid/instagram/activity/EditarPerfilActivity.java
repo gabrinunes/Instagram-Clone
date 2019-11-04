@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 
@@ -40,6 +41,8 @@ public class EditarPerfilActivity extends AppCompatActivity {
     private Usuario usuarioLogado;
     private static final int SELECAO_GALERIA = 200;
     private StorageReference storageRef;
+    private String urlImagemSelecionado="";
+    private String idUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
         usuarioLogado = UsuarioFirebase.getDadosUsuarioLogado();
         storageRef = ConfiguracaoFirebase.getFirebaseStorage();
+        idUsuario = UsuarioFirebase.getIdUsuario();
 
         //Configura toolbar
 
@@ -118,7 +122,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
                     StorageReference imagemRef = storageRef
                             .child("imagens")
                             .child("perfil")
-                            .child("<id-usuario>.jpeg");
+                            .child(idUsuario + "jpeg");
                     UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
                     uploadTask.addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -130,7 +134,11 @@ public class EditarPerfilActivity extends AppCompatActivity {
                     }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            urlImagemSelecionado = taskSnapshot.getDownloadUrl().toString();
                             ExibirMensagem("Sucesso ao fazer upload da imagem");
+
+                            Uri url = taskSnapshot.getDownloadUrl();
+                            atualizarFotoPerfil(url);
                         }
                     });
 
@@ -150,6 +158,24 @@ public class EditarPerfilActivity extends AppCompatActivity {
         FirebaseUser usuario = UsuarioFirebase.getUsuarioAtual();
         editTextNome.setText(usuario.getDisplayName());
         editTextEmail.setText(usuario.getEmail());
+        Uri url = usuario.getPhotoUrl();
+
+        if(url!=null){
+            Picasso.get()
+                    .load(url)
+                    .into(editImagePerfil);
+        }else{
+            editImagePerfil.setImageResource(R.drawable.avatar);
+        }
+    }
+
+    private void atualizarFotoPerfil(Uri url){
+        boolean retorno = UsuarioFirebase.atualizarFotoUsuario(url);
+        if(retorno){
+            usuarioLogado.setCaminhoFoto(url.toString());
+            usuarioLogado.atualizar();
+            ExibirMensagem("Sua foto foi atualizada!");
+        }
     }
 
     private void exibirMensagem(String texto) {
