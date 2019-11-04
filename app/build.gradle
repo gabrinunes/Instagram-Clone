@@ -33,6 +33,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:11.8.0'
     implementation 'com.google.firebase:firebase-storage:11.8.0'
     implementation 'com.google.firebase:firebase-auth:11.8.0'
+    implementation 'com.firebaseui:firebase-ui-storage:0.6.0'
 
 
     //Dependencia do NavigationBottom
@@ -43,8 +44,6 @@ dependencies {
     //Dependencia CircleImagemView
     implementation 'de.hdodenhof:circleimageview:3.0.1'
 
-    //Dependencia Picasso
-    implementation 'com.squareup.picasso:picasso:2.71828'
 }
 
 apply plugin: 'com.google.gms.google-services'

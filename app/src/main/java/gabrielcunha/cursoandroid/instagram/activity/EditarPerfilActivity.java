@@ -17,12 +17,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 
@@ -161,9 +161,9 @@ public class EditarPerfilActivity extends AppCompatActivity {
         Uri url = usuario.getPhotoUrl();
 
         if(url!=null){
-            Picasso.get()
-                    .load(url)
-                    .into(editImagePerfil);
+            Glide.with(EditarPerfilActivity.this)
+                  .load(url)
+                  .into(editImagePerfil);
         }else{
             editImagePerfil.setImageResource(R.drawable.avatar);
         }
