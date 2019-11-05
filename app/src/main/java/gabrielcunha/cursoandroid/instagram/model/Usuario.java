@@ -10,12 +10,21 @@ import gabrielcunha.cursoandroid.instagram.helper.ConfiguracaoFirebase;
 
 public class Usuario {
     private String nome;
+    private String nomeLowerCase;
     private String email;
     private String senha;
     private String id;
     private String caminhoFoto;
 
     public Usuario() {
+    }
+
+    public String getNomeLowerCase() {
+        return nomeLowerCase.toLowerCase();
+    }
+
+    public void setNomeLowerCase(String nomeLowerCase) {
+        this.nomeLowerCase = nomeLowerCase;
     }
 
     public String getId() {

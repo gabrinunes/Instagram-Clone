@@ -179,7 +179,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
     }
 
     private void exibirMensagem(String texto) {
-        Toast.makeText(EditarPerfilActivity.this,texto,Toast.LENGTH_SHORT);
+        Toast.makeText(EditarPerfilActivity.this,texto,Toast.LENGTH_SHORT).show();
     }
 
     private void inicializarComponentes() {

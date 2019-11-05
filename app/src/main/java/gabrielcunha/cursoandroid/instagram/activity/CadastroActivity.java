@@ -111,6 +111,7 @@ public class CadastroActivity extends AppCompatActivity {
               if(!textSenha.isEmpty()){
                   usuario = new Usuario();
                   usuario.setNome(textNome);
+                  usuario.setNomeLowerCase(textNome);
                   usuario.setEmail(textEmail);
                   usuario.setSenha(textSenha);
 
