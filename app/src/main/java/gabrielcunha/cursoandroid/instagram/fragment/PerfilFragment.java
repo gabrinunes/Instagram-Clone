@@ -46,8 +46,8 @@ public class PerfilFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressPerfil);
         imagePerfil = view.findViewById(R.id.imageEditarPerfil);
         textPublicacoes = view.findViewById(R.id.textPublicacoes);
-        textSeguidores = view.findViewById(R.id.textSeguindo);
-        textSeguindo = view.findViewById(R.id.textSeguindo);
+        textSeguidores = view.findViewById(R.id.textSeguidores);
+        textSeguindo = view.findViewById(R.id.textView6);
         buttonAcaoPerfil = view.findViewById(R.id.buttonAcaoPerfil);
 
         //Abre edição de perfil

@@ -16,8 +16,35 @@ public class Usuario implements Serializable {
     private String senha;
     private String id;
     private String caminhoFoto;
+    private int seguidores =0;
+    private int seguindo =0;
+    private int postagens =0;
 
     public Usuario() {
+    }
+
+    public int getSeguidores() {
+        return seguidores;
+    }
+
+    public void setSeguidores(int seguidores) {
+        this.seguidores = seguidores;
+    }
+
+    public int getSeguindo() {
+        return seguindo;
+    }
+
+    public void setSeguindo(int seguindo) {
+        this.seguindo = seguindo;
+    }
+
+    public int getPostagens() {
+        return postagens;
+    }
+
+    public void setPostagens(int postagens) {
+        this.postagens = postagens;
     }
 
     public String getNomeLowerCase() {
@@ -67,6 +94,9 @@ public class Usuario implements Serializable {
         usuarioMap.put("nome",getNome());
         usuarioMap.put("id",getId());
         usuarioMap.put("caminhoFoto",getCaminhoFoto());
+        usuarioMap.put("seguidores",getSeguidores());
+        usuarioMap.put("postagens",getPostagens());
+        usuarioMap.put("seguindo",getSeguindo());
 
         return usuarioMap;
     }
