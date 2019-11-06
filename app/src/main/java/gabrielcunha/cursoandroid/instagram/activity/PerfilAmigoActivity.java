@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -13,6 +14,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import gabrielcunha.cursoandroid.instagram.R;
@@ -23,12 +26,14 @@ import gabrielcunha.cursoandroid.instagram.model.Usuario;
 public class PerfilAmigoActivity extends AppCompatActivity {
 
     private Usuario usuarioSelecionado;
+    private Usuario usuarioLogado;
     private Button buttonAcaoPerfil;
     private CircleImageView imagePerfil;
     private DatabaseReference firebaseRef;
     private DatabaseReference usuarioRef;
     private DatabaseReference seguidoresRef;
     private DatabaseReference usuarioAmigoRef;
+    private DatabaseReference usuarioLogadoRef;
     private ValueEventListener valueEventListenerPerfilAmigo;
     private String idUsuarioLogado;
     private TextView textPublicacoes,textSeguidores,textSeguindo;
@@ -70,14 +75,34 @@ public class PerfilAmigoActivity extends AppCompatActivity {
             }
 
         }
+    }
 
-        verificaSegueUsuarioAmigo();
+    private void recuperarDadosUsuarioLogado(){
+
+        usuarioLogadoRef = usuarioRef.child(idUsuarioLogado);
+        usuarioLogadoRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Recupera dados de usuário logado
+                usuarioLogado = dataSnapshot.getValue(Usuario.class);
+              /* Verifica se usuário já está seguindo
+                 amigo selecionado
+               */
+                verificaSegueUsuarioAmigo();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void incializarComponentes() {
         buttonAcaoPerfil = findViewById(R.id.buttonAcaoPerfil);
         imagePerfil = findViewById(R.id.imageEditarPerfil);
-        buttonAcaoPerfil.setText("Seguir");
+        buttonAcaoPerfil.setText("Carregando");
         textPublicacoes = findViewById(R.id.textPublicacoes);
         textSeguidores = findViewById(R.id.textSeguidores);
         textSeguindo = findViewById(R.id.textView6);
@@ -108,19 +133,45 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         });
     }
 
-    private void habilitarBotaoSeguir(boolean segueUsuario){
+    private void habilitarBotaoSeguir(final boolean segueUsuario){
 
         if(segueUsuario){
             buttonAcaoPerfil.setText("Seguindo");
         }else{
             buttonAcaoPerfil.setText("Seguir");
+
+            //Adicionar evento para seguir usuario
+            buttonAcaoPerfil.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Salvar seguidor
+                    salvarSeguidor(usuarioLogado,usuarioSelecionado);
+                }
+            });
         }
     }
+
+    private void salvarSeguidor(Usuario usuarioLogado,Usuario usuarioAmigo){
+
+        HashMap<String,Object> dadosAmigo = new HashMap<>();
+        dadosAmigo.put("nome",usuarioAmigo.getNome());
+        dadosAmigo.put("caminhoFoto",usuarioAmigo.getCaminhoFoto());
+        DatabaseReference seguidorRef = seguidoresRef
+                .child(usuarioLogado.getId())
+                .child(usuarioAmigo.getId());
+        seguidorRef.setValue(dadosAmigo);
+
+        //Alterar botao acao para seguindo
+        buttonAcaoPerfil.setText("Seguindo");
+        buttonAcaoPerfil.setOnClickListener(null);
+    }
+
 
     @Override
     protected void onStart() {
         super.onStart();
         recuperarDadosPerfilAmigo();
+        recuperarDadosUsuarioLogado();
     }
 
     @Override
