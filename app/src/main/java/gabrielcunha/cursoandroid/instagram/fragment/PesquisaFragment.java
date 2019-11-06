@@ -30,6 +30,7 @@ import gabrielcunha.cursoandroid.instagram.activity.PerfilAmigoActivity;
 import gabrielcunha.cursoandroid.instagram.adapter.AdapterPesquisa;
 import gabrielcunha.cursoandroid.instagram.helper.ConfiguracaoFirebase;
 import gabrielcunha.cursoandroid.instagram.helper.RecyclerItemClickListener;
+import gabrielcunha.cursoandroid.instagram.helper.UsuarioFirebase;
 import gabrielcunha.cursoandroid.instagram.model.Usuario;
 
 /**
@@ -43,6 +44,7 @@ public class PesquisaFragment extends Fragment {
     private List<Usuario> listaUsuarios;
     private DatabaseReference usuariosRef;
     private AdapterPesquisa adapterPesquisa;
+    private String idUsuarioLogado;
 
 
     public PesquisaFragment() {
@@ -63,6 +65,7 @@ public class PesquisaFragment extends Fragment {
         listaUsuarios = new ArrayList<>();
         usuariosRef = ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("usuarios");
+        idUsuarioLogado = UsuarioFirebase.getIdUsuario();
 
         //Configurações RecyclerView
         adapterPesquisa = new AdapterPesquisa(listaUsuarios,getActivity());
@@ -134,7 +137,12 @@ public class PesquisaFragment extends Fragment {
                     listaUsuarios.clear();
                     for(DataSnapshot ds : dataSnapshot.getChildren()){
 
-                        listaUsuarios.add(ds.getValue(Usuario.class));
+                        //verificar se é usuário logado e remove da lista
+                        Usuario usuario = ds.getValue(Usuario.class);
+                        if(idUsuarioLogado.equals(usuario.getId()))
+                        continue;//Volta ao começo do for
+
+                        listaUsuarios.add(usuario);
                     }
 
                     adapterPesquisa.notifyDataSetChanged();

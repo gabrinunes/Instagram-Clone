@@ -151,19 +151,35 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         }
     }
 
-    private void salvarSeguidor(Usuario usuarioLogado,Usuario usuarioAmigo){
+    private void salvarSeguidor(Usuario uLogado,Usuario uAmigo){
 
         HashMap<String,Object> dadosAmigo = new HashMap<>();
-        dadosAmigo.put("nome",usuarioAmigo.getNome());
-        dadosAmigo.put("caminhoFoto",usuarioAmigo.getCaminhoFoto());
+        dadosAmigo.put("nome",uAmigo.getNome());
+        dadosAmigo.put("caminhoFoto",uAmigo.getCaminhoFoto());
         DatabaseReference seguidorRef = seguidoresRef
-                .child(usuarioLogado.getId())
-                .child(usuarioAmigo.getId());
+                .child(uLogado.getId())
+                .child(uAmigo.getId());
         seguidorRef.setValue(dadosAmigo);
 
         //Alterar botao acao para seguindo
         buttonAcaoPerfil.setText("Seguindo");
         buttonAcaoPerfil.setOnClickListener(null);
+
+        //Incrementar seguindo do usuário logado
+        int seguindo = uLogado.getSeguindo() + 1;
+        HashMap<String,Object> dadosSeguindo = new HashMap<>();
+        dadosSeguindo.put("seguindo",seguindo);
+        DatabaseReference usuarioSeguindo = usuarioRef
+                .child(uLogado.getId());
+        usuarioSeguindo.updateChildren(dadosSeguindo);
+
+        //Incrementar seguidores do amigo
+        int seguidores = uAmigo.getSeguidores()+1;
+        HashMap<String,Object> dadosSeguidores = new HashMap<>();
+        dadosSeguidores.put("seguidores",seguidores);
+        DatabaseReference usuarioSeguidores = usuarioRef
+                .child(uAmigo.getId());
+        usuarioSeguidores.updateChildren(dadosSeguidores);
     }
 
 
