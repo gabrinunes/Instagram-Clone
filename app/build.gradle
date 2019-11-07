@@ -47,6 +47,9 @@ dependencies {
     //Dependencia AndroidPhilter
     implementation 'info.androidhive:imagefilters:1.0.7'
 
+    //Dependencia AndroidUniversalImagemLoader
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
