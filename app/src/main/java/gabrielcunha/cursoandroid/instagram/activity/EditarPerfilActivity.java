@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -29,6 +30,7 @@ import java.io.ByteArrayOutputStream;
 import de.hdodenhof.circleimageview.CircleImageView;
 import gabrielcunha.cursoandroid.instagram.R;
 import gabrielcunha.cursoandroid.instagram.helper.ConfiguracaoFirebase;
+import gabrielcunha.cursoandroid.instagram.helper.Permissao;
 import gabrielcunha.cursoandroid.instagram.helper.UsuarioFirebase;
 import gabrielcunha.cursoandroid.instagram.model.Usuario;
 
@@ -44,11 +46,18 @@ public class EditarPerfilActivity extends AppCompatActivity {
     private String urlImagemSelecionado="";
     private String idUsuario;
 
+    private String [] permissoesNecessarias = new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil);
         inicializarComponentes();
+        //Validar permissões
+        Permissao.validarPermissoes(permissoesNecessarias,EditarPerfilActivity.this,1);
+
 
         usuarioLogado = UsuarioFirebase.getDadosUsuarioLogado();
         storageRef = ConfiguracaoFirebase.getFirebaseStorage();
