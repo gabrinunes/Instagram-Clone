@@ -2,9 +2,11 @@ package gabrielcunha.cursoandroid.instagram.model;
 
 import com.google.firebase.database.DatabaseReference;
 
+import java.io.Serializable;
+
 import gabrielcunha.cursoandroid.instagram.helper.ConfiguracaoFirebase;
 
-public class Postagem {
+public class Postagem implements Serializable {
 
     private String id;
     private String idUsuario;
