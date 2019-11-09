@@ -1,6 +1,7 @@
 package gabrielcunha.cursoandroid.instagram.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -58,8 +59,7 @@ public class FiltroActivity extends AppCompatActivity {
     private String idUsuarioLogado;
     private TextInputEditText textDescricao;
     private Usuario usuarioLogado;
-    private ProgressBar progressFiltro;
-    private boolean estaCarregando;
+    private AlertDialog dialog;
 
     private RecyclerView recyclerFiltros;
     private DatabaseReference usuarioLogadoRef;
@@ -80,7 +80,6 @@ public class FiltroActivity extends AppCompatActivity {
         imageFotoEscolhida = findViewById(R.id.imageFotoEscolhida);
         recyclerFiltros = findViewById(R.id.recyclerFiltros);
         textDescricao = findViewById(R.id.textDescricaoFiltro);
-        progressFiltro = findViewById(R.id.progressFiltro);
 
         Toolbar toolbar = findViewById(R.id.toolbarPrincipal);
         toolbar.setTitle("Filtros");
@@ -143,27 +142,29 @@ public class FiltroActivity extends AppCompatActivity {
 
     }
 
-    private void carregando(boolean estado){
+    private void  abrirDialogCarregamento(String titulo){
 
-        if(estado){
-            estaCarregando = true;
-            progressFiltro.setVisibility(View.VISIBLE);
-        }else{
-            estaCarregando = false;
-            progressFiltro.setVisibility(View.GONE);
-        }
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(titulo);
+        alert.setCancelable(false);
+        alert.setView(R.layout.carregamento);
+        dialog = alert.create();
+        dialog.show();
+
+
     }
+
 
     private void recuperarDadosUsuarioLogado(){
 
-        carregando(true);
+        abrirDialogCarregamento("Carregando dados, aguarde!");
         usuarioLogadoRef = usuarioRef.child(idUsuarioLogado);
         usuarioLogadoRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Recupera dados de usuário logado
                 usuarioLogado = dataSnapshot.getValue(Usuario.class);
-                carregando(false);
+                dialog.cancel();
             }
 
             @Override
@@ -219,52 +220,50 @@ public class FiltroActivity extends AppCompatActivity {
 
     private void publicarPostagem() {
 
-        if(estaCarregando){
-            exibirMensagem("Carregando dados, aguarde!");
-        }else{
 
-            final Postagem postagem = new Postagem();
-            postagem.setIdUsuario(idUsuarioLogado);
-            postagem.setDescricao(textDescricao.getText().toString());
+        abrirDialogCarregamento("Salvando postagem");
+        final Postagem postagem = new Postagem();
+        postagem.setIdUsuario(idUsuarioLogado);
+        postagem.setDescricao(textDescricao.getText().toString());
 
-            //Recuperar Dados da Imagem para o firebase
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            imagemFiltro.compress(Bitmap.CompressFormat.JPEG,70,baos);
-            byte[] dadosImagem = baos.toByteArray();
+//Recuperar Dados da Imagem para o firebase
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        imagemFiltro.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+        byte[] dadosImagem = baos.toByteArray();
 
-            //Salvar a imagem no firebase storage
-            StorageReference storageRef = ConfiguracaoFirebase.getFirebaseStorage();
-            StorageReference imagemRef = storageRef
-                    .child("imagens")
-                    .child("postagens")
-                    .child(postagem.getId()+ ".jpeg");
-            UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    exibirMensagem("Erro ao salvar a imagem, tente novamente");
+//Salvar a imagem no firebase storage
+        StorageReference storageRef = ConfiguracaoFirebase.getFirebaseStorage();
+        StorageReference imagemRef = storageRef
+                .child("imagens")
+                .child("postagens")
+                .child(postagem.getId() + ".jpeg");
+        UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                exibirMensagem("Erro ao salvar a imagem, tente novamente");
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Uri url = taskSnapshot.getDownloadUrl();
+                postagem.setCaminhoFoto(url.toString());
+
+                //Salvar postagem
+                if (postagem.salvar()) {
+
+                    //Atualizar qtde de postagens
+                    int qtdPostagem = usuarioLogado.getPostagens() + 1;
+                    usuarioLogado.setPostagens(qtdPostagem);
+                    usuarioLogado.atualizarQtdePostagem();
+                    exibirMensagem("Sucesso ao salvar postagem");
+                    dialog.cancel();
+                    finish();
                 }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Uri url = taskSnapshot.getDownloadUrl();
-                    postagem.setCaminhoFoto(url.toString());
 
-                    //Salvar postagem
-                    if(postagem.salvar()){
-
-                        //Atualizar qtde de postagens
-                        int qtdPostagem = usuarioLogado.getPostagens() +1;
-                        usuarioLogado.setPostagens(qtdPostagem);
-                        usuarioLogado.atualizarQtdePostagem();
-                        exibirMensagem("Sucesso ao salvar postagem");
-                        finish();
-                    }
-
-                }
-            });
-        }
-        }
+            }
+        });
+    }
 
 
 
